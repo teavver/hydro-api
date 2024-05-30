@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "hydro_app",
+    "hydro.hydro_app",
 ]
 
 MIDDLEWARE = [
@@ -80,8 +80,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "postgres",
         "USER": "postgres",
-        "PASSWORD": "test123",
-        "HOST": "localhost",
+        "PASSWORD": "postgres",
+        # NOTE: HOST should be 'localhost' if not running as Docker image
+        "HOST": "db",
         "PORT": "5432",
     }
 }
