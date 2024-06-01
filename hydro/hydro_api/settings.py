@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "hydro.hydro_app",
+    "rest_framework.authtoken",
+    "hydro_app",
+    "users_api",
 ]
 
 MIDDLEWARE = [
