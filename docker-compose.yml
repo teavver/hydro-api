@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=hydro.hydro_api.settings
+      - DJANGO_SETTINGS_MODULE=hydro.settings
     depends_on:
       - db
   db:
