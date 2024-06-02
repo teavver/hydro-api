@@ -50,6 +50,7 @@ class HydroponicSystemMeasurementListCreateView(generics.ListCreateAPIView):
         filters.OrderingFilter,
     ]
     filterset_class = HydroponicSystemMeasurementFilter
+    # Allow filtering by date, temperature, pH and TDS
     ordering_fields = ["created_at", "temperature", "pH", "TDS"]
 
     def get_queryset(self):
@@ -67,7 +68,7 @@ class HydroponicSystemMeasurementListCreateView(generics.ListCreateAPIView):
 
 class HydroponicSystemLatestMeasurementsView(generics.ListAPIView):
     """
-    API endpoint to return the 10 latest measurements for a specific hydroponic system.
+    API endpoint to return the 10 latest measurements for a specific System.
     """
 
     serializer_class = HydroponicSystemMeasurementSerializer
