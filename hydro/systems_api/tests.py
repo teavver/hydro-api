@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from .serializers import HydroponicSystemMeasurementSerializer
 from .models import HydroponicSystem, HydroponicSystemMeasurement
 
 
@@ -116,9 +117,9 @@ class HydroponicSystemAPITest(APITestCase):
         for _ in range(20):
             HydroponicSystemMeasurement.objects.create(
                 system=system,
-                temperature=uniform(15.0, 30.0),
-                pH=uniform(5.5, 7.5),
-                TDS=uniform(500, 1500),
+                temperature=round(uniform(15.0, 30.0)),
+                pH=round(uniform(5.5, 7.5)),
+                TDS=round(uniform(500, 1500)),
             )
 
         response = self.client.get(self.system_latest_measurements_endpoint(system.id))
@@ -132,6 +133,13 @@ class HydroponicSystemAPITest(APITestCase):
         latest_measurements_ids = [
             measurement.id for measurement in latest_measurements
         ]
+
+        # DEBUG
+        # serialized_measurements = HydroponicSystemMeasurementSerializer(
+        #     latest_measurements, many=True
+        # )
+        # latest_data = serialized_measurements.data
+        # print(f"10 latest measurements: {latest_data}")
 
         # Actual data we received in res
         response_measurements_ids = [measurement["id"] for measurement in response.data]
