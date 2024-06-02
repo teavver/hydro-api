@@ -93,7 +93,8 @@ class HydroponicSystemAPITest(APITestCase):
         HydroponicSystem.objects.create(name="testSystem2", owner=self.user)
         response = self.client.get(self.create_system_endpoint)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertIn("results", response.data)
+        self.assertEqual(len(response.data["results"]), 2)
 
     def test_access_other_users_system(self):
         """
@@ -124,7 +125,22 @@ class HydroponicSystemAPITest(APITestCase):
 
         response = self.client.get(self.system_latest_measurements_endpoint(system.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 10)
+
+        # # Unfold paginated response
+        # results = response.data["results"]
+        # self.assertEqual(len(results), 10)
+
+        # # Get the latest measurements directly from DB and compare
+        # latest_measurements = HydroponicSystemMeasurement.objects.filter(
+        #     system=system
+        # ).order_by("-id")[:10]
+        # latest_measurements_ids = [
+        #     measurement.id for measurement in latest_measurements
+        # ]
+
+        # Unfold paginated response
+        results = response.data["results"]
+        self.assertEqual(len(results), 10)
 
         # Get the latest measurements directly from DB and compare
         latest_measurements = HydroponicSystemMeasurement.objects.filter(
@@ -141,6 +157,10 @@ class HydroponicSystemAPITest(APITestCase):
         # latest_data = serialized_measurements.data
         # print(f"10 latest measurements: {latest_data}")
 
-        # Actual data we received in res
-        response_measurements_ids = [measurement["id"] for measurement in response.data]
+        # Actual data we received in the response
+        response_measurements_ids = [measurement["id"] for measurement in results]
         self.assertEqual(latest_measurements_ids, response_measurements_ids)
+
+        # # Actual data we received in res
+        # response_measurements_ids = [measurement["id"] for measurement in response.data]
+        # self.assertEqual(latest_measurements_ids, response_measurements_ids)

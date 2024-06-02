@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, pagination
 from django_filters import rest_framework, filters
 from .models import HydroponicSystem, HydroponicSystemMeasurement
 from .filters import HydroponicSystemMeasurementFilter
@@ -16,9 +16,13 @@ class HydroponicSystemListCreateView(generics.ListCreateAPIView):
 
     serializer_class = HydroponicSystemSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
-        return HydroponicSystem.objects.filter(owner=self.request.user)
+        # Sort newest to oldest by default
+        return HydroponicSystem.objects.filter(owner=self.request.user).order_by(
+            "-created_at"
+        )
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -45,6 +49,7 @@ class HydroponicSystemMeasurementListCreateView(generics.ListCreateAPIView):
 
     serializer_class = HydroponicSystemMeasurementSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = pagination.PageNumberPagination
     filter_backends = [
         rest_framework.DjangoFilterBackend,
         filters.OrderingFilter,
@@ -56,7 +61,7 @@ class HydroponicSystemMeasurementListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return HydroponicSystemMeasurement.objects.filter(
             system__owner=self.request.user
-        )
+        ).order_by("-created_at")
 
     def perform_create(self, serializer):
         hydroponic_system_id = self.request.data.get("system")
