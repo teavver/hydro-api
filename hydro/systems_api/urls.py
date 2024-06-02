@@ -1,15 +1,30 @@
 from django.urls import path
-from .views import HydroponicSystemCreate, HydroponicSystemMeasurementCreate
+from .views import (
+    HydroponicSystemListCreateView,
+    HydroponicSystemRetrieveUpdateDeleteView,
+    HydroponicSystemLatestMeasurementsView,
+    HydroponicSystemMeasurementListCreateView,
+)
 
 urlpatterns = [
     path(
-        "create-system/",
-        HydroponicSystemCreate.as_view(),
-        name="system-create",
+        "",
+        HydroponicSystemListCreateView.as_view(),
+        name="system-list-create",
     ),
     path(
-        "create-measurement/",
-        HydroponicSystemMeasurementCreate.as_view(),
-        name="measurement-create",
+        "<int:pk>/",
+        HydroponicSystemRetrieveUpdateDeleteView.as_view(),
+        name="system-detail",
+    ),
+    path(
+        "<int:pk>/latest-measurements/",
+        HydroponicSystemLatestMeasurementsView.as_view(),
+        name="system-latest-measurements",
+    ),
+    path(
+        "measurements/",
+        HydroponicSystemMeasurementListCreateView.as_view(),
+        name="measurement-list-create",
     ),
 ]

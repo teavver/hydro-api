@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
@@ -10,10 +11,14 @@ class HydroponicSystemAPITest(APITestCase):
         """
         Setup the test user, auth token, client
         """
+
         self.user = User.objects.create_user(username="testuser", password="password")
         self.token = Token.objects.create(user=self.user)
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        self.create_system_endpoint = reverse("system-list-create")
+        self.measurements_endpoint = reverse("measurement-list-create")
+
         print(f"setup complete. user: {self.user.username}, token: {self.token.key}")
 
     def test_create_hydroponic_system(self):
@@ -22,7 +27,7 @@ class HydroponicSystemAPITest(APITestCase):
         """
 
         response = self.client.post(
-            "/api/systems/create-system/",
+            self.create_system_endpoint,
             {"name": "testSystem"},
         )
 

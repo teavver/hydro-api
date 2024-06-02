@@ -9,10 +9,11 @@ class HydroponicSystem(models.Model):
     )
 
 
-# Because many measurements can be linked to a single System, we need to make
-# sure that the measurements are deleted with the System they belong to
-# (and vice versa)
 class HydroponicSystemMeasurement(models.Model):
+    """
+    When a system gets deleted, all measurements belonging to it are also deleted
+    """
+
     system = models.ForeignKey(
         HydroponicSystem,
         on_delete=models.CASCADE,
