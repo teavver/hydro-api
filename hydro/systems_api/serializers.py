@@ -3,10 +3,15 @@ from .models import HydroponicSystem, HydroponicSystemMeasurement
 
 
 class HydroponicSystemSerializer(serializers.ModelSerializer):
+    measurement_count = serializers.SerializerMethodField()
+
     class Meta:
         model = HydroponicSystem
         fields = "__all__"
-        read_only_fields = ["id", "owner"]
+        read_only_fields = ["id", "owner", "measurement_count"]
+
+    def get_measurement_count(self, obj):
+        return HydroponicSystemMeasurement.objects.filter(system=obj).count()
 
 
 class HydroponicSystemMeasurementSerializer(serializers.ModelSerializer):
