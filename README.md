@@ -1,6 +1,10 @@
-# Setup app
+# hydro-api
 
-Clone the repo: `git clone https://github.com/teavver/hydro-api && cd hydro-api`
+### Simple DRF + PostgreSQL api for managing hydroponic systems
+
+## Installation
+
+Clone the repo first: `git clone https://github.com/teavver/hydro-api && cd hydro-api`
 
 ## Run using Docker:
 
