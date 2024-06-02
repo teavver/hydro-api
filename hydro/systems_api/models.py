@@ -7,6 +7,7 @@ class HydroponicSystem(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="hydroponic_systems"
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class HydroponicSystemMeasurement(models.Model):
@@ -22,3 +23,4 @@ class HydroponicSystemMeasurement(models.Model):
     pH = models.DecimalField(max_digits=4, decimal_places=2)
     temperature = models.FloatField()
     TDS = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
