@@ -126,18 +126,6 @@ class HydroponicSystemAPITest(APITestCase):
         response = self.client.get(self.system_latest_measurements_endpoint(system.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # # Unfold paginated response
-        # results = response.data["results"]
-        # self.assertEqual(len(results), 10)
-
-        # # Get the latest measurements directly from DB and compare
-        # latest_measurements = HydroponicSystemMeasurement.objects.filter(
-        #     system=system
-        # ).order_by("-id")[:10]
-        # latest_measurements_ids = [
-        #     measurement.id for measurement in latest_measurements
-        # ]
-
         # Unfold paginated response
         results = response.data["results"]
         self.assertEqual(len(results), 10)
@@ -161,6 +149,28 @@ class HydroponicSystemAPITest(APITestCase):
         response_measurements_ids = [measurement["id"] for measurement in results]
         self.assertEqual(latest_measurements_ids, response_measurements_ids)
 
-        # # Actual data we received in res
-        # response_measurements_ids = [measurement["id"] for measurement in response.data]
-        # self.assertEqual(latest_measurements_ids, response_measurements_ids)
+    def test_system_measurements_relation(self):
+        """
+        Deleting a system should automatically remove all measurements inside it
+        """
+        system = HydroponicSystem.objects.create(name="testSystem", owner=self.user)
+
+        # Push few random measurements
+        for _ in range(5):
+            HydroponicSystemMeasurement.objects.create(
+                system=system,
+                temperature=round(uniform(15.0, 30.0)),
+                pH=round(uniform(5.5, 7.5)),
+                TDS=round(uniform(500, 1500)),
+            )
+        self.assertEqual(
+            HydroponicSystemMeasurement.objects.filter(system=system).count(), 5
+        )
+
+        system_id = system.id
+        system.delete()
+
+        # Measurements should be gone once the System is deleted
+        self.assertEqual(
+            HydroponicSystemMeasurement.objects.filter(system_id=system_id).count(), 0
+        )
