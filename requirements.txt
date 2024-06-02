@@ -3,6 +3,7 @@ autopep8==2.2.0
 click==8.1.7
 colorama==0.4.6
 Django==5.0.6
+django-filter==24.2
 djangorestframework==3.15.1
 graphviz==0.20.3
 mypy-extensions==1.0.0
