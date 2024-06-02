@@ -17,18 +17,19 @@ Clone the repo: `git clone https://github.com/teavver/hydro-api && cd hydro-api`
 
 3. Install the dependencies: `pip install -r requirements.txt && cd hydro`
 
-4. Set `ENV` to `local`:
+4. Run database migrations: `python manage.py migrate`
 
-   - On Unix/macOS: `ENV=local`
-   - On Windows (PowerShell): `setx ENV "local"`
+5. Run the development server: `python manage.py runserver 0.0.0.0:8000`
 
-5. Run database migrations: `python manage.py migrate`
-6. Run the development server: `python manage.py runserver 0.0.0.0:8000`
-7. Access the application at `http://localhost:8000`.
+6. Access the application at `http://localhost:8000`.
 
 # Running tests
 
-Test an app with: `docker-compose exec web python manage.py test <app>`. Replace `<app>` with the app's name, e.g: `users_api` to run the tests inside [users_api/tests.py](hydro/users_api/tests.py)
+- Docker:
+  1. Migrate first: `docker-compose exec web python manage.py migrate`
+  2. Running tests: `docker-compose exec web python manage.py test`
+- Local (venv):
+  1. `python manage.py test`
 
 # Migrations
 

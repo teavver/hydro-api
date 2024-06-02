@@ -94,6 +94,7 @@ class HydroponicSystemAPITest(APITestCase):
         response = self.client.get(self.create_system_endpoint)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("results", response.data)
+        print(f"all systems of user {self.user}: {response.data}")
         self.assertEqual(len(response.data["results"]), 2)
 
     def test_access_other_users_system(self):
