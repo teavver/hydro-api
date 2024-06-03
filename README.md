@@ -86,8 +86,8 @@ Returns the authentication `token` in response body on success
 
 ```json
 {
+  "id": "uniqueId",
   "name": "string",
-  "type": "string",
   "created_at": "datetime",
   "owner": "userId"
 }
@@ -168,11 +168,11 @@ Get information about a specific System, update it, or delete it permanently. De
 ```json
 {
   "id": "uniqueId",
-  "system": "systemId",
-  "temperature": "float",
   "pH": "float",
+  "temperature": "float",
   "TDS": "float",
-  "created_at": "datetime"
+  "created_at": "datetime",
+  "system": "systemId"
 }
 ```
 
@@ -223,7 +223,7 @@ List all measurements for the authenticated user's systems or create a new measu
 
 ```json
 {
-  "system": "system_id",
+  "system": "systemId",
   "temperature": 22.5,
   "pH": 6.8,
   "TDS": 500
